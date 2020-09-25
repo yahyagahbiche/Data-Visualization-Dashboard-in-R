@@ -1,0 +1,152 @@
+---
+title: "Quick Project 2: Business Process Improvement"
+author: "Yahya Gahbiche"
+date: 5/28/2020
+output: slidy_presentation
+---
+
+```{r echo = FALSE}
+# Course: 5210 Communicating Data
+# Purpose: Build a slidy presentation and a dashboard
+# Date: May 28, 2020
+# Author: Yahya Gahbiche
+```
+
+```{r echo = FALSE}
+# Clear environment of variables and functions
+rm(list = ls(all = TRUE)) 
+
+# Clear environmet of packages
+if(is.null(sessionInfo()$otherPkgs) == FALSE)lapply(paste("package:", names(sessionInfo()$otherPkgs), sep=""), detach, character.only = TRUE, unload = TRUE)
+
+```
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+# Load librarys
+
+# For wrangling, subseting, and ploting
+library(tidyverse)
+
+
+```
+
+
+
+Waste reduction: Packaging  
+=========================================
+
+<div style="float: left; width: 75%;">
+
+
+</div>
+
+<div style="float: left; width: 50%;">
+
+![](Most orders contain 2 and 3 items per order.png){width=600px}
+
+
+
++ Waste can be in the form of extra packaging or unefficient usage of labor and equipment. 
+
++ Here we see that most customers order 2 or 3 items in one order. 
++ In order to reduce waste we must have more items per order.
+
+
+<br> 
+
+</div>
+
+
+Changing Shipping mode can save us time
+=========================================
+
+<div style="float: left; width: 50%;">
+
+
+
+
+![](Standard shipping orders have a high cost associated with them.png){width=600px}
+
+
++ Same Day shipping does't cost a lot compared to Standard Shipping 
+
++ Costs from Standard shipping can be reduced. 
+
++ We can advertise more for Same Day shipping to reduce waste (time)
+
+
+<br> 
+
+</div>
+
+
+New York City is where we should focus our marketing efforts
+===========================================================
+
+<div style="float: left; width: 50%;">
+
+
+
+![](New York City is leading in total profits.png){width=400px} 
+
+
+
++ It is evident that NYC is ahead of all other big cities in the US.
+
++ Sales in NYC are over **$60,000.**
+
++ philadelphia had a lot of sales volume but a lot of losses. 
+
+  - We need to look into why Philadelphia has all these losses
+
+<br> 
+
+</div>
+
+
+We need to stop selling to Philadelphia
+========================================================
+
+<div style="float: left; width: 50%;">
+
+
+![](Philadelphia Annual profit.png){width=400px} 
+
+
++ We can clearly see how Philadelphia has been losing money in the past year
+
++ It had also recorded a large loss before the end of **2014**
+
+
+
+<br> 
+
+</div>
+
+
+To wrap-up 
+========================================================
+
+<div style="float: left; width: 50%;">
+
+
++ To reduce waste we need to advertise for more items per order.
+  
+    - This can be done for example by combining items going to the same address and shipping them on one particluar day.
+    
+    - This can be a membership program that customers can sign up for to benefit from the premium service.
+    
++ Focus more on quick shipping: Same Day and First Class. 
+
+    - This will:
+    
+        - Reduce waste: Time
+        - Increase customer satisfaction
+
++ We must focus on generating profit from NYC as it is the leader in sales number and profit.
+
+
+
+
+
+

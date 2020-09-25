@@ -1,0 +1,174 @@
+---
+title: "Business Process Improvement of Office Mate"
+author: Quick Project 2
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+---
+
+
+```{r echo = FALSE}
+# Course: 5210 Communicating Data
+# Purpose: Quick Project 2
+# Date: 5/30/2020
+# Author: Yahya Gahbiche
+
+```
+
+
+```{r echo = FALSE, include=FALSE}
+# Clear environment of variables and functions
+rm(list = ls(all = TRUE)) 
+
+# Clear environmet of packages
+if(is.null(sessionInfo()$otherPkgs) == FALSE)lapply(paste("package:", names(sessionInfo()$otherPkgs), sep=""), detach, character.only = TRUE, unload = TRUE)
+
+```
+
+```{r echo = FALSE, message=FALSE}
+# Load packages
+library(flexdashboard)
+library(tidyverse)
+library(scales)
+library(lubridate)
+library(gridExtra)
+library(janitor)
+library(knitr)
+library(GGally)
+library(kableExtra)
+library(MultinomialCI) # mulinomal confindence interval
+library(data.table)
+library(formattable)
+
+library(dygraphs)
+library(xts)  # to convert date data to xts data, xts is time series class
+
+
+# Load data
+OM <- read.csv("mtp_off_mate.csv", header = TRUE)
+
+# Converting the variable dates into date structure
+OM$Order.Date <- mdy(OM$Order.Date)
+OM$Ship.Date <- mdy(OM$Ship.Date)
+
+# Creating cost and shippping time variables 
+
+OM <- OM %>% 
+  mutate(Days_In_Shipping = Ship.Date - Order.Date) %>% 
+  mutate(Cost = Revenue - Profit)
+
+OM$Days_In_Shipping <- as.factor(OM$Days_In_Shipping)
+
+
+```
+
+
+
+Row
+-------------------------------------
+    
+### Chart 1: We need to increase the number of items per order to reduce waste
+    
+```{r}
+
+ OM %>% 
+  ggplot(mapping = aes(x = Quantity))+
+  geom_bar(position = "dodge") +
+  labs(title = "Most orders contain 2 and 3 items per order",
+       x = "Quantity sold in each order",
+       y = "Sales count") + 
+  theme_classic() + 
+  scale_x_continuous(breaks = seq(0,15,1))
+
+
+```
+    
+    
+    
+### Chart 2: Standard shipping orders have a high cost associated with them
+
+```{r}
+
+OM %>% 
+  ggplot(mapping = aes(x = Ship.Mode, y = Cost, fill = Days_In_Shipping))+
+  geom_bar(stat = "identity") + 
+  theme_classic()+
+  scale_y_continuous(breaks = seq(0,1250000,100000), label = dollar) +
+  theme(axis.ticks.x = element_blank()) +
+  labs(title = "Standard shipping orders have a high cost associated with them",
+       subtitle = "Costs associated with Same Day shipping are relatively low",
+       x = " Shipping Mode",
+       fill = "Days in Shipping")
+
+
+```
+
+
+
+Row
+-------------------------------------
+
+### Chart 3: We need to stop selling to Philadelphia
+
+```{r}
+# Getting only big cities
+
+BigCities <- c("New York City","Los Angeles","San Francisco","Philadelphia","Seattle")
+
+# Graph
+
+sum_prof_City <- OM %>% 
+  group_by(City) %>%
+  filter(City %in% BigCities) %>% 
+  summarize(sum_prof = sum(Profit)) %>% 
+  ggplot(mapping = aes(x = reorder(City,sum_prof),
+                       y = sum_prof, fill = City)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_hline(yintercept = 0) +
+  theme_classic() +
+  theme(axis.line.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  coord_flip() +
+  labs(title = "New York City is leading in total profits",
+       y = "Total Profit") +
+  scale_fill_manual(values = c("grey", "red", "grey","grey","grey")) +
+  scale_y_continuous(labels = dollar)
+
+sum_prof_City
+
+
+ 
+```
+
+
+
+    
+### Chart 4: We need to stop selling to Philadelphia
+    
+```{r message=FALSE}
+
+Phili <- OM %>% 
+  filter(City == "Philadelphia") %>% 
+  mutate(Year = floor_date(x = Order.Date, unit = "month")) %>% 
+  group_by(Year) %>% 
+  summarize(yearly_profit = sum(Profit)) %>% 
+  ggplot(mapping = aes(x = Year, y = yearly_profit)) +
+  geom_line() + 
+  theme_classic() + 
+  scale_y_continuous(breaks = seq(-3000,25000, 500), label = dollar) + 
+  labs(title = "Philadelphia Annual profit",
+       y = "Annual Profit")
+
+Phili
+
+```
+    
+
+
+
+
+
+
+
+
